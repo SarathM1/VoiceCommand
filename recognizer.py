@@ -7,6 +7,27 @@ try:
     import pocketsphinx
 except ValueError:
     import pocketsphinx
+'''
+###############################################################################
+"""
+Error Handler to handle ALSA errors which can be ignored. To ignore, replace print 
+statement with pass    
+"""
+from ctypes import *
+import pyaudio
+
+# Define our error handler type
+ERROR_HANDLER_FUNC = CFUNCTYPE(None, c_char_p, c_int, c_char_p, c_int, c_char_p)
+def py_error_handler(filename, line, function, err, fmt):
+  #print 'messages are yummy'
+  pass
+c_error_handler = ERROR_HANDLER_FUNC(py_error_handler)
+
+asound = cdll.LoadLibrary('libasound.so')
+# Set error handler
+asound.snd_lib_error_set_handler(c_error_handler)
+###############################################################################
+'''
 
 # Paths
 BASE_PATH = '/home/sm/Documents/scribe'
