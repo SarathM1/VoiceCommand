@@ -20,9 +20,9 @@ CHANNELS = 1
 RATE = 16000 # Speech recognition only works well with this rate.  Don't change unless your microphone demands it.
 CHUNK = 128 # The size of each audio chunk coming from the input device.
 RECORD_SECONDS = 2 # Number of seconds to record, can be changed.
-WAVE_OUTPUT_FILENAME = "output.wav" # Where to save the recording from the microphone.
+WAVE_OUTPUT_FILENAME = "record.wav" # Where to save the recording from the microphone.
 
-def save_audio(wav_file):
+def record_audio(wav_file):
     """
     Stream audio from an input device and save it.
     """
@@ -95,5 +95,5 @@ def recognize(wav_file):
 
 # Run the thing!
 if __name__ == '__main__':
-    save_audio(WAVE_OUTPUT_FILENAME)
+    record_audio(WAVE_OUTPUT_FILENAME)
     result = recognize(WAVE_OUTPUT_FILENAME)
