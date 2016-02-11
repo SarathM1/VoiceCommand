@@ -104,15 +104,22 @@ def recognize(wav_file):
 
     hypothesis = speech_rec.hyp()
     logmath = speech_rec.get_logmath()
-    print ('Best hypothesis: ', hypothesis.hypstr, " model score: ", hypothesis.best_score, " confidence: ", logmath.exp(hypothesis.prob))
+    try:
+        print ('Best hypothesis: ', hypothesis.hypstr, 
+            " model score: ", hypothesis.best_score,
+            " confidence: ", logmath.exp(hypothesis.prob))
 
-    print ('Best hypothesis segments: ', [seg.word for seg in speech_rec.seg()])
+        print ('Best hypothesis segments: ', [seg.word for seg in speech_rec.seg()])
 
-    # Access N best decodings.
+        # Access N best decodings.
 
-    print ('Best 10 hypothesis: ')
-    for best, i in zip(speech_rec.nbest(), range(10)):
-        print (best.hypstr, best.score)
+        print ('Best 10 hypothesis: ')
+        for best, i in zip(speech_rec.nbest(), range(10)):
+            print (best.hypstr, best.score)
+
+    except AttributeError, e:
+        print '\tError: ',e
+        print '\t',"N.B: This error usually occurs when no sound is detected !!"
 
 # Run the thing!
 if __name__ == '__main__':
