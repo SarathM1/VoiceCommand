@@ -30,7 +30,7 @@ asound.snd_lib_error_set_handler(c_error_handler)
 
 
 # Paths
-BASE_PATH = '/home/sm/Documents/scribe'
+BASE_PATH = './'
 HMDIR = os.path.join(BASE_PATH, "hmm")
 LMDIR = os.path.join(BASE_PATH, "lm/cmusphinx-5.0-en-us.lm.dmp")
 DICTD = os.path.join(BASE_PATH, "dict/cmu07a.dic")
@@ -46,16 +46,19 @@ WAVE_OUTPUT_FILENAME = "record.wav" # Where to save the recording from the micro
 def record_audio(wav_file):
     """
     Stream audio from an input device and save it.
+
+    To remove the following Error uninstall bluez-alsa:
+        "bt_audio_service_open: connect() failed: Connection refused (111)"
     """
+    
     p = pyaudio.PyAudio()
+    
     stream = p.open(
         format=FORMAT,
         channels=CHANNELS,
         rate=RATE,
         input=True,
-        frames_per_buffer=CHUNK,
-        #input_device_index=device
-    )
+        frames_per_buffer=CHUNK)
 
     print("* recording")
 
