@@ -7,7 +7,7 @@ try:
     import pocketsphinx
 except ValueError:
     import pocketsphinx
-'''
+
 ###############################################################################
 """
 Error Handler to handle ALSA errors which can be ignored. To ignore, replace print 
@@ -27,7 +27,7 @@ asound = cdll.LoadLibrary('libasound.so')
 # Set error handler
 asound.snd_lib_error_set_handler(c_error_handler)
 ###############################################################################
-'''
+
 
 # Paths
 BASE_PATH = '/home/sm/Documents/scribe'
