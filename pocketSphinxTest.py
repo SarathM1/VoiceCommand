@@ -6,7 +6,7 @@ from pocketsphinx.pocketsphinx import *
 from sphinxbase.sphinxbase import *
 
 
-BASE_PATH = '/home/sm/Documents/scribe'
+BASE_PATH = './'
 HMDIR = path.join(BASE_PATH, "hmm")
 LMDIR = path.join(BASE_PATH, "lm/cmusphinx-5.0-en-us.lm.dmp")
 DICTD = path.join(BASE_PATH, "dict/cmu07a.dic")
@@ -45,13 +45,3 @@ print ('Best hypothesis segments: ', [seg.word for seg in decoder.seg()])
 print ('Best 10 hypothesis: ')
 for best, i in zip(decoder.nbest(), range(10)):
     print (best.hypstr, best.score)
-"""
-stream = open('goforward.mfc', 'rb')
-stream.read(4)
-buf = stream.read(13780)
-decoder.start_utt()
-decoder.process_cep(buf, False, True)
-decoder.end_utt()
-hypothesis = decoder.hyp()
-print ('Best hypothesis: ', hypothesis.hypstr, " model score: ", hypothesis.best_score, " confidence: ", hypothesis.prob)
-"""
