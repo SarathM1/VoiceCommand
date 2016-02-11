@@ -1,15 +1,14 @@
 
 from os import environ, path
-
-
 from pocketsphinx.pocketsphinx import *
 from sphinxbase.sphinxbase import *
 
 
-BASE_PATH = './'
-HMDIR = path.join(BASE_PATH, "hmm")
-LMDIR = path.join(BASE_PATH, "lm/cmusphinx-5.0-en-us.lm.dmp")
-DICTD = path.join(BASE_PATH, "dict/cmu07a.dic")
+MODELDIR = "./model"
+
+HMDIR = path.join(MODELDIR, 'en-us/en-us')
+LMDIR = path.join(MODELDIR, 'en-us/en-us.lm.bin')
+DICTD = path.join(MODELDIR, 'en-us/cmudict-en-us.dict')
 
 # Create a decoder with certain model
 config = Decoder.default_config()
@@ -25,7 +24,8 @@ print ("Pronunciation for word 'hello' is ", decoder.lookup_word("hello"))
 print ("Pronunciation for word 'abcdf' is ", decoder.lookup_word("abcdf"))
 """
 decoder.start_utt()
-stream = open('cards2.wav', 'rb')
+stream = open('hello.wav', 'rb')
+
 while True:
   buf = stream.read(1024)
   if buf:
@@ -36,12 +36,18 @@ decoder.end_utt()
 
 hypothesis = decoder.hyp()
 logmath = decoder.get_logmath()
-print ('Best hypothesis: ', hypothesis.hypstr, " model score: ", hypothesis.best_score, " confidence: ", logmath.exp(hypothesis.prob))
 
-print ('Best hypothesis segments: ', [seg.word for seg in decoder.seg()])
+try:
+    print '\nBEST HYPOTHESIS: ', hypothesis.hypstr,"\tMODEL SCORE: ", hypothesis.best_score,"\tCONFIDENCE: ", logmath.exp(hypothesis.prob)
 
-# Access N best decodings.
+    print '\nBEST HYPOTHESIS SEGMENTS: ', [seg.word for seg in decoder.seg()]
 
-print ('Best 10 hypothesis: ')
-for best, i in zip(decoder.nbest(), range(10)):
-    print (best.hypstr, best.score)
+    # Access N best decodings.
+
+    print ('\nBEST 10 HYPOTHESIS:\n')
+    for best, i in zip(decoder.nbest(), range(10)):
+        print '\t',"HYPOTHESIS: ",best.hypstr, "\tSCORE: ",best.score
+
+except AttributeError, e:
+    print '\tError: ',e
+    print '\t',"N.B: This error usually occurs when no sound is detected !!"

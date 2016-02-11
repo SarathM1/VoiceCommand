@@ -30,17 +30,18 @@ asound.snd_lib_error_set_handler(c_error_handler)
 
 
 # Paths
-BASE_PATH = './'
-HMDIR = os.path.join(BASE_PATH, "hmm")
-LMDIR = os.path.join(BASE_PATH, "lm/cmusphinx-5.0-en-us.lm.dmp")
-DICTD = os.path.join(BASE_PATH, "dict/cmu07a.dic")
+MODELDIR = "./model"
+
+HMDIR = os.path.join(MODELDIR, 'en-us/en-us')
+LMDIR = os.path.join(MODELDIR, 'en-us/en-us.lm.bin')
+DICTD = os.path.join(MODELDIR, 'en-us/cmudict-en-us.dict')
 
 # Options
 FORMAT = pyaudio.paInt16 # Should not be changed, as this format is best for speech recognition.
 CHANNELS = 1
 RATE = 16000 # Speech recognition only works well with this rate.  Don't change unless your microphone demands it.
 CHUNK = 128 # The size of each audio chunk coming from the input device.
-RECORD_SECONDS = 2 # Number of seconds to record, can be changed.
+RECORD_SECONDS = 5 # Number of seconds to record, can be changed.
 WAVE_OUTPUT_FILENAME = "record.wav" # Where to save the recording from the microphone.
 
 def record_audio(wav_file):
@@ -95,6 +96,8 @@ def recognize(wav_file):
 
     # Decode streaming data.
     speech_rec = pocketsphinx.Decoder(config)
+    print "\nPronunciation for word 'hello' is ", speech_rec.lookup_word("hello")
+
     speech_rec.start_utt()
     stream = open(wav_file, 'rb')
     while True:
@@ -108,17 +111,15 @@ def recognize(wav_file):
     hypothesis = speech_rec.hyp()
     logmath = speech_rec.get_logmath()
     try:
-        print ('Best hypothesis: ', hypothesis.hypstr, 
-            " model score: ", hypothesis.best_score,
-            " confidence: ", logmath.exp(hypothesis.prob))
+        print '\nBEST HYPOTHESIS: ', hypothesis.hypstr,"\tMODEL SCORE: ", hypothesis.best_score,"\tCONFIDENCE: ", logmath.exp(hypothesis.prob)
 
-        print ('Best hypothesis segments: ', [seg.word for seg in speech_rec.seg()])
+        print '\nBEST HYPOTHESIS SEGMENTS: ', [seg.word for seg in speech_rec.seg()]
 
         # Access N best decodings.
 
-        print ('Best 10 hypothesis: ')
+        print ('\nBEST 10 HYPOTHESIS:\n')
         for best, i in zip(speech_rec.nbest(), range(10)):
-            print (best.hypstr, best.score)
+            print '\t',"HYPOTHESIS: ",best.hypstr, "\tSCORE: ",best.score
 
     except AttributeError, e:
         print '\tError: ',e
